@@ -11,10 +11,10 @@ const Index = () => {
   useLenis();
 
   useEffect(() => {
-    document.title = "Aarav & Ananya — A Wedding Invitation";
+    document.title = "Viha & Pranay — A Wedding Invitation";
     const meta = document.querySelector('meta[name="description"]');
     const content =
-      "A divine invitation to the wedding of Aarav & Ananya. Scroll through our story.";
+      "A divine invitation to the wedding of Viha & Pranay. Scroll through our story.";
     if (meta) meta.setAttribute("content", content);
     else {
       const m = document.createElement("meta");
@@ -30,25 +30,26 @@ const Index = () => {
 
       <SlideIntro />
 
+    <PersonSlide
+        side="right"
+        image={brideImg}
+        title="The Bride"
+        name="Viha (Sravani)"
+        intro="Daughter of Mr. Ravuri Malleshwara Rao & Mrs. Ravuri Padhmavathi. A classical dancer and storyteller, who finds magic in the smallest moments of life."
+        meta="Palakollu · 1998"
+        bg="royal"
+      />
+
       <PersonSlide
         side="left"
         image={groomImg}
         title="The Groom"
-        name="Aarav Sharma"
+        name="Pranay Chari"
         intro="Son of Mr. Rajesh & Mrs. Priya Sharma. An architect by trade, a dreamer by heart — finding poetry in still mornings and quiet music."
-        meta="Bengaluru · 1995"
+        meta="Hyderabad · 1998"
         bg="cream"
       />
 
-      <PersonSlide
-        side="right"
-        image={brideImg}
-        title="The Bride"
-        name="Ananya Iyer"
-        intro="Daughter of Mr. Suresh & Mrs. Lakshmi Iyer. A classical dancer and storyteller, who finds magic in the smallest moments of life."
-        meta="Chennai · 1997"
-        bg="royal"
-      />
 
       <SlideCouple />
 
