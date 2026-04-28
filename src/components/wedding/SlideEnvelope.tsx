@@ -1,37 +1,44 @@
-import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
-import { useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  MotionValue,
+} from "framer-motion";
+import { useRef, useState } from "react";
 import floralTL from "@/assets/floral-tl.png";
 import floralBR from "@/assets/floral-br.png";
 import damaskBg from "@/assets/damask-bg.jpg";
-import ganeshaIcon from "@/assets/ganesha-icon.png";
+import ganeshaIcon from "@/assets/Ganesh-icon.png";
+import vinayaka from "@/assets/vinayaka.png";
 import medallionTop from "@/assets/medallion-top.png";
-import medallionBanner from "@/assets/medallion-banner.png";
 
-/* ---------- EASY-TO-EDIT CONTENT ---------- */
+/* ─── INVITATION CONTENT ───────────────────────────────────── */
 const INVITE = {
   blessings: ["Shrirasthu", "Shubhamasthu", "Avighnamasthu"],
   heading: "Wedding Invitation",
   intro: "We solicit your gracious presence",
   intro2: "with family & friends on the auspicious occasion",
-  intro3: "of the marriage of our elder son",
+  intro3: "of the marriage of our beloved son",
   groomPrefix: "Chi.",
   groom: "Pranay Chary",
   with: "with",
   bridePrefix: "Chi.La.Sow.",
-  bride: "Viha (Sravani)",
+  bride: "Viha Sravani",
   brideParents:
-    "(Elder D/o. Smt. & Sri Ravuri Padhmavathi - Subrhamanya Veerabhadra Malleshwara Rao R/o. Chinthaparru)",
+    "Elder S/o. Smt. & Sri Uma Maheshwari – Kolloju Narsimha Charyi, R/o. Chitkul",
   muhurthamLabel: "Sumuhurtham",
-  date: "On Wednesday, 06th May 2026",
-  time: "at 10:49 a.m. \u201CKarkataka Lagnam\u201D",
+  date: "Wednesday, 06th May 2026",
+  time: 'at 10:49 a.m. \u201CKarkataka Lagnam\u201D',
   venueLabel: "Venue",
   venue: "P.S.R. Gardens",
-  venueAddress: "Beside Kotak Mahendra Bank,\nVill. Muthangi, Mdl. Patancheru,\nSangareddy Dist.",
+  venueAddress:
+    "Beside Kotak Mahendra Bank,\nVill. Muthangi, Mdl. Patancheru,\nSangareddy Dist.",
   invitedBy: "Invited By",
-  hosts: ["Smt. Kolloju Uma Maheshwari", "Sri Kolloju Narsimha Chary"],
+  hosts: ["Smt. Ravuri Padhmavathi", "Sri Subrhamanya Veerabhadra Malleshwara Rao"],
   closing: "With Best Compliments from : Near & Dear.",
 };
-/* ------------------------------------------ */
+/* ──────────────────────────────────────────────────────────── */
 
 export const SlideEnvelope = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -42,125 +49,154 @@ export const SlideEnvelope = () => {
 
   const p = useSpring(scrollYProgress, { damping: 40, stiffness: 140, mass: 0.6 });
 
-  // Card enters & settles
-  const cardY = useTransform(p, [0, 0.18], ["10%", "0%"]);
+  /* Card enter */
+  const cardY       = useTransform(p, [0, 0.18], ["8%", "0%"]);
   const cardOpacity = useTransform(p, [0, 0.15], [0, 1]);
-  const cardScale = useTransform(p, [0, 0.18], [0.9, 1]);
+  const cardScale   = useTransform(p, [0, 0.18], [0.92, 1]);
 
-  // Gate rotation 0.28 - 0.72
-  const leftRot = useTransform(p, [0.28, 0.72], [0, -168]);
-  const rightRot = useTransform(p, [0.28, 0.72], [0, 168]);
+  /* Gate fold 0.28 → 0.72 */
+  const leftRot  = useTransform(p, [0.28, 0.72], [0, -172]);
+  const rightRot = useTransform(p, [0.28, 0.72], [0,  172]);
 
-  // Lighting on panels (front face brightness)
-  const leftShade = useTransform(p, [0.28, 0.5, 0.72], [1, 0.62, 0.78]);
-  const rightShade = useTransform(p, [0.28, 0.5, 0.72], [1, 0.62, 0.78]);
+  /* Gate face brightness while rotating */
+  const leftShade  = useTransform(p, [0.28, 0.5, 0.72], [1, 0.55, 0.7]);
+  const rightShade = useTransform(p, [0.28, 0.5, 0.72], [1, 0.55, 0.7]);
 
-  // Inner reveal
-  const innerOpacity = useTransform(p, [0.42, 0.7], [0, 1]);
-  const innerScale = useTransform(p, [0.42, 0.85], [0.95, 1]);
+  /* Inner reveal */
+  const innerOpacity = useTransform(p, [0.45, 0.72], [0, 1]);
+  const innerScale   = useTransform(p, [0.45, 0.88], [0.96, 1]);
 
-  // Push gates fully aside
-  const gatesX = useTransform(p, [0.72, 0.95], [0, 80]);
-  const gatesOpacity = useTransform(p, [0.85, 0.98], [1, 0]);
+  /* Slide gates off-screen after they've opened */
+  const gatesX        = useTransform(p, [0.72, 0.95], [0, 90]);
+  const negGatesX     = useTransform(gatesX, (v) => -v); /* ← FIX: top-level hook */
+  const gatesOpacity  = useTransform(p, [0.85, 0.98], [1, 0]);
 
-  // Crease fade
-  const creaseOpacity = useTransform(p, [0.15, 0.35], [0.55, 0]);
+  /* Crease shadow fades as gates open */
+  const creaseOpacity = useTransform(p, [0.15, 0.38], [0.6, 0]);
 
-  // Final caption
+  /* Prompts */
   const captionOpacity = useTransform(p, [0.9, 1], [0, 1]);
-  const promptOpacity = useTransform(p, [0, 0.1], [0.85, 0]);
+  const promptOpacity  = useTransform(p, [0, 0.08], [0.9, 0]);
+
+  /* 3-D hover tilt on the whole card */
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r  = e.currentTarget.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+    const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+    setTilt({ rx: dy * -5, ry: dx * 6 });
+  };
+  const onLeave = () => setTilt({ rx: 0, ry: 0 });
 
   return (
     <section ref={ref} className="relative h-[360vh]">
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center"
+      <div
+        className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center"
         style={{
-          background: "radial-gradient(ellipse at center, hsl(var(--royal-soft)) 0%, hsl(var(--royal-deep)) 70%)",
+          background:
+            "radial-gradient(ellipse at 35% 45%, hsl(226 55% 17%) 0%, hsl(226 70% 8%) 55%, hsl(226 78% 5%) 100%)",
         }}
       >
-        <Sparkles />
+        {/* Star-dust background */}
+        <StarField />
 
-        {/* Scroll prompt */}
+        {/* Floating flower symbols */}
+        <FloatingSymbols />
+
+        {/* "Scroll to open" prompt */}
         <motion.p
           style={{ opacity: promptOpacity }}
-          className="absolute top-10 left-1/2 -translate-x-1/2 font-sans-clean tracking-luxury text-[10px] uppercase text-gold-bright/80 z-30"
+          className="absolute top-9 left-1/2 -translate-x-1/2 font-sans-clean tracking-luxury text-[10px] uppercase text-gold-bright/70 z-30 pointer-events-none"
         >
           Scroll to open the invitation
         </motion.p>
 
-        {/* Card stage */}
+        {/* ── CARD STAGE ─────────────────────────────── */}
         <motion.div
+          className="relative w-[95vw] sm:w-[90vw] md:w-[85vw] max-w-[1800px] max-h-[80vh] aspect-[0.75/1] sm:aspect-[1.1/1] md:aspect-[1.4/1] lg:aspect-[1.6/1] 2xl:aspect-[1.8/1]"
           style={{
-            y: cardY,
-            opacity: cardOpacity,
-            scale: cardScale,
-            perspective: 2600,
+            y: cardY, opacity: cardOpacity, scale: cardScale,
+            filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.12)) drop-shadow(0 24px 48px rgba(0,0,0,0.38))",
           }}
-          className="relative w-[90vw] max-w-[860px] aspect-[1.45/1] drop-shadow-[0_40px_60px_rgba(0,0,0,0.55)]"
+          onMouseMove={onMove}
+          onMouseLeave={onLeave}
         >
-          {/* INNER PAGE (revealed behind gates) */}
-          <motion.div
-            style={{ opacity: innerOpacity, scale: innerScale }}
-            className="absolute inset-0 z-0"
+          {/* 3-D perspective + tilt — overflow-hidden clips everything to card bounds */}
+          <div
+            className="relative w-full h-full overflow-hidden rounded-[2px]"
+            style={{
+              perspective: "2000px",
+              transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+              transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1)",
+            }}
           >
-            <InnerInvitation />
-          </motion.div>
+            {/* INNER PAGE (revealed behind gates) */}
+            <motion.div
+              style={{ opacity: innerOpacity, scale: innerScale }}
+              className="absolute inset-0 z-0 overflow-hidden"
+            >
+              <InnerInvitation />
+            </motion.div>
 
-          {/* GATES */}
-          <motion.div
-            style={{ x: useTransform(gatesX, (v) => -v), opacity: gatesOpacity }}
-            className="absolute inset-0 z-10"
-          >
-            <div className="absolute inset-0" style={{ perspective: 2600 }}>
-              <motion.div
-                style={{
-                  rotateY: leftRot,
-                  transformOrigin: "0% 50%",
-                  transformStyle: "preserve-3d",
-                }}
-                className="absolute left-0 top-0 w-1/2 h-full"
-              >
-                <GatePanel side="left" shade={leftShade} />
-              </motion.div>
-            </div>
-          </motion.div>
+            {/* ── LEFT GATE ── */}
+            <motion.div
+              style={{ x: negGatesX, opacity: gatesOpacity }}
+              className="absolute inset-0 z-10"
+            >
+              <div className="absolute inset-0" style={{ perspective: "2600px" }}>
+                <motion.div
+                  style={{
+                    rotateY: leftRot,
+                    transformOrigin: "0% 50%",
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="absolute left-0 top-0 w-1/2 h-full"
+                >
+                  <GatePanel side="left" shade={leftShade} />
+                </motion.div>
+              </div>
+            </motion.div>
 
-          <motion.div
-            style={{ x: gatesX, opacity: gatesOpacity }}
-            className="absolute inset-0 z-10"
-          >
-            <div className="absolute inset-0" style={{ perspective: 2600 }}>
-              <motion.div
-                style={{
-                  rotateY: rightRot,
-                  transformOrigin: "100% 50%",
-                  transformStyle: "preserve-3d",
-                }}
-                className="absolute right-0 top-0 w-1/2 h-full"
-              >
-                <GatePanel side="right" shade={rightShade} />
-              </motion.div>
-            </div>
-          </motion.div>
+            {/* ── RIGHT GATE ── */}
+            <motion.div
+              style={{ x: gatesX, opacity: gatesOpacity }}
+              className="absolute inset-0 z-10"
+            >
+              <div className="absolute inset-0" style={{ perspective: "2600px" }}>
+                <motion.div
+                  style={{
+                    rotateY: rightRot,
+                    transformOrigin: "100% 50%",
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="absolute right-0 top-0 w-1/2 h-full"
+                >
+                  <GatePanel side="right" shade={rightShade} />
+                </motion.div>
+              </div>
+            </motion.div>
 
-          {/* center crease shadow */}
-          <motion.div
-            style={{ opacity: creaseOpacity }}
-            className="absolute left-1/2 top-[3%] bottom-[3%] w-[3px] -translate-x-1/2 z-20 pointer-events-none"
-          >
-            <div className="w-full h-full bg-gradient-to-b from-transparent via-black/40 to-transparent" />
-          </motion.div>
+            {/* ── CENTER CREASE SHADOW ── */}
+            <motion.div
+              style={{ opacity: creaseOpacity }}
+              className="absolute left-1/2 top-[2%] bottom-[2%] w-[4px] -translate-x-1/2 z-20 pointer-events-none"
+            >
+              <div className="w-full h-full bg-gradient-to-b from-transparent via-black/50 to-transparent" />
+            </motion.div>
+          </div>
         </motion.div>
+        {/* ─────────────────────────────────────────── */}
 
         {/* Final caption */}
         <motion.div
           style={{ opacity: captionOpacity }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center z-30"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none"
         >
-          <p className="font-display italic text-gold-bright text-lg">
+          <p className="font-display italic text-gold-bright text-xl">
             With love &amp; blessings
           </p>
-          <p className="mt-1 font-sans-clean tracking-luxury text-[10px] uppercase text-gold-bright/70">
-            Pranay &amp; Viha
+          <p className="mt-1 font-sans-clean tracking-luxury text-[10px] uppercase text-gold-bright/60">
+            Viha &amp; Pranay
           </p>
         </motion.div>
       </div>
@@ -168,7 +204,9 @@ export const SlideEnvelope = () => {
   );
 };
 
-/* ---------- GATE PANEL (outer cover half) ---------- */
+/* ══════════════════════════════════════════════════════════════
+   GATE PANEL  (outer cover half)
+══════════════════════════════════════════════════════════════ */
 const GatePanel = ({
   side,
   shade,
@@ -181,238 +219,309 @@ const GatePanel = ({
 
   return (
     <motion.div
-      style={{ filter: brightness, backfaceVisibility: "hidden" }}
+      style={{ filter: brightness, backfaceVisibility: "hidden" } as any}
       className="relative w-full h-full overflow-hidden"
     >
-      {/* Cream paper base — no damask on cover */}
+      {/* ── Paper base ── */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, hsl(40 38% 97%) 0%, hsl(38 28% 92%) 50%, hsl(36 22% 86%) 100%)",
+            "linear-gradient(160deg, hsl(40 42% 97%) 0%, hsl(38 30% 93%) 55%, hsl(36 24% 87%) 100%)",
         }}
       />
 
-      {/* Single damask block in the CENTER of the closed cover — split across gates */}
-      <div
-        className={`absolute top-1/2 ${isLeft ? "right-0" : "left-0"} -translate-y-1/2 h-[55%] aspect-square ${
-          isLeft ? "translate-x-1/2" : "-translate-x-1/2"
-        } pointer-events-none opacity-40 mix-blend-multiply z-[1]`}
-        style={{ clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)" }}
-      >
-        <img src={damaskBg} alt="" className="w-full h-full object-cover" />
-      </div>
-
-      {/* double inner frame */}
-      <div className="absolute inset-[14px] border border-stone-300/70 z-[2]" />
-      <div className="absolute inset-[18px] border border-stone-200/50 z-[2]" />
-
-      {/* Floral corner — only on the RIGHT panel, bottom-right outer corner.
-          (floral-br.png file actually contains a top-left bouquet, so we flip it.) */}
-      {!isLeft && (
+      {/* ── Medallion Background for each panel ── */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <img
-          src={floralBR}
+          src={medallionTop}
           alt=""
-          className="absolute bottom-0 right-0 w-[45%] pointer-events-none select-none z-[3]"
-          style={{ transform: "scaleX(-1) scaleY(-1)" }}
+          className="w-full h-full object-cover opacity-80"
         />
-      )}
-
-      {/* CENTER GANESHA — split across both gates so it sits perfectly centered when closed */}
-      <div
-        className={`absolute top-1/2 ${isLeft ? "right-0" : "left-0"} -translate-y-1/2 h-[36%] aspect-square ${
-          isLeft ? "translate-x-1/2" : "-translate-x-1/2"
-        } z-[4] pointer-events-none`}
-      >
-        <div
-          className="relative w-full h-full"
-          style={{ clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)" }}
-        >
-          <img
-            src={ganeshaIcon}
-            alt=""
-            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_4px_10px_rgba(80,60,30,0.35)]"
-          />
-        </div>
       </div>
 
-      {/* Bottom: Wedding Invitation banner — split across both gates */}
+      {/* ── CENTER VINAYAKA / GANESHA — split across both gates ── */}
       <div
-        className={`absolute bottom-[10%] ${isLeft ? "right-0" : "left-0"} h-[12%] w-[55%] ${
-          isLeft ? "translate-x-1/2" : "-translate-x-1/2"
-        } z-[4] pointer-events-none`}
+        className={`absolute top-1/2 -translate-y-1/2 h-[44%] aspect-square pointer-events-none z-10 ${
+          isLeft ? "right-0 translate-x-1/2" : "left-0 -translate-x-1/2"
+        }`}
+        style={{
+          clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)",
+        }}
       >
+        {/* Damask background in the center, masked to fade out radially */}
         <div
-          className="relative w-full h-full"
-          style={{ clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)" }}
-        >
-          <img
-            src={medallionBanner}
-            alt=""
-            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_3px_6px_rgba(80,60,30,0.25)]"
-          />
-        </div>
+          className="absolute inset-0 opacity-[0.8]"
+          style={{
+            backgroundImage: `url(${damaskBg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            maskImage: "radial-gradient(circle, black 25%, transparent 68%)",
+            WebkitMaskImage: "radial-gradient(circle, black 25%, transparent 68%)",
+          }}
+        />
+        
+        {/* Plain Vinayaka image */}
+        <img
+          src={vinayaka}
+          alt="Lord Vinayaka"
+          className="absolute inset-0 w-full h-full object-contain p-4"
+        />
       </div>
 
-      {/* directional edge lighting (spine vs outer edge) */}
+      {/* ── Directional lighting (bright edges, no dark shadows) ── */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none z-20"
         style={{
           background: isLeft
-            ? "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, transparent 18%, transparent 80%, rgba(0,0,0,0.35) 100%)"
-            : "linear-gradient(90deg, rgba(0,0,0,0.35) 0%, transparent 20%, transparent 82%, rgba(255,255,255,0.25) 100%)",
+            ? "linear-gradient(90deg, rgba(255,255,255,0.4) 0%, transparent 20%, transparent 80%, rgba(255,255,255,0.3) 100%)"
+            : "linear-gradient(90deg, rgba(255,255,255,0.3) 0%, transparent 20%, transparent 80%, rgba(255,255,255,0.4) 100%)",
         }}
       />
     </motion.div>
   );
 };
 
-/* ---------- INNER INVITATION PAGE ---------- */
+/* ══════════════════════════════════════════════════════════════
+   INNER INVITATION  (revealed when gates open)
+══════════════════════════════════════════════════════════════ */
 const InnerInvitation = () => (
   <div
-    className="relative w-full h-full overflow-hidden shadow-elegant"
+    className="relative w-full h-full overflow-hidden"
     style={{
       background:
-        "linear-gradient(180deg, hsl(40 35% 96%) 0%, hsl(38 28% 93%) 50%, hsl(36 22% 88%) 100%)",
+        "linear-gradient(170deg, hsl(40 38% 97%) 0%, hsl(38 30% 94%) 45%, hsl(36 24% 89%) 100%)",
     }}
   >
-    {/* damask pattern */}
+    {/* Damask watermark — very subtle */}
     <div
-      className="absolute inset-0 opacity-25 mix-blend-multiply"
+      className="absolute inset-0 opacity-[0.13] mix-blend-multiply pointer-events-none"
       style={{
         backgroundImage: `url(${damaskBg})`,
         backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     />
-    {/* paper texture grain */}
+
+    {/* Fold line */}
+    <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-stone-400/20 pointer-events-none" />
+
+    {/* Floral top-left: floral-tl.png */}
+    <img
+      src={floralTL}
+      alt=""
+      className="absolute top-0 left-0 w-[22%] pointer-events-none select-none mix-blend-multiply"
+      style={{ opacity: 0.85 }}
+    />
+    {/* Floral bottom-right: floral-br.png */}
+    <img
+      src={floralBR}
+      alt=""
+      className="absolute bottom-0 right-0 w-[22%] pointer-events-none select-none mix-blend-multiply"
+      style={{ opacity: 0.85 }}
+    />
+
+    {/* Gold embossed frame */}
     <div
-      className="absolute inset-0 opacity-[0.18] mix-blend-multiply pointer-events-none"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at 30% 20%, hsl(var(--gold-deep)/0.15) 1px, transparent 2px), radial-gradient(circle at 70% 80%, hsl(var(--gold-deep)/0.1) 1px, transparent 2px)",
-        backgroundSize: "40px 40px, 30px 30px",
-      }}
+      className="absolute inset-[10px] pointer-events-none"
+      style={{ border: "1px solid hsl(38 55% 50% / 0.5)" }}
+    />
+    <div
+      className="absolute inset-[14px] pointer-events-none"
+      style={{ border: "0.5px solid hsl(345 55% 30% / 0.2)" }}
     />
 
-    {/* Center crease line */}
-    <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-stone-400/30 z-20 pointer-events-none" />
+    {/* Corner flourishes */}
+    {[
+      "top-[10px] left-[10px]",
+      "top-[10px] right-[10px] rotate-90",
+      "bottom-[10px] right-[10px] rotate-180",
+      "bottom-[10px] left-[10px] -rotate-90",
+    ].map((cls) => (
+      <svg
+        key={cls}
+        className={`absolute ${cls} w-5 h-5 z-10 pointer-events-none`}
+        viewBox="0 0 20 20"
+        fill="none"
+      >
+        <path
+          d="M2 2 L10 2 M2 2 L2 10 M2 2 Q8 2 8 8"
+          stroke="hsl(38 55% 50%)"
+          strokeWidth="0.8"
+        />
+        <circle cx="2" cy="2" r="1.2" fill="hsl(38 55% 50%)" />
+      </svg>
+    ))}
 
-    {/* Floral corners — note: asset filenames are inverted, so floral-br has the TL bouquet and vice-versa */}
-    <img src={floralBR} alt="" className="absolute top-0 left-0 w-[24%] pointer-events-none select-none z-10" />
-    <img src={floralTL} alt="" className="absolute bottom-0 right-0 w-[24%] pointer-events-none select-none z-10" />
-
-    {/* double frame */}
-    <div className="absolute inset-[14px] border border-rose-900/30 z-10" />
-    <div className="absolute inset-[18px] border border-rose-900/15 z-10" />
-
-    {/* Content - matches reference card exactly */}
-    <div className="relative z-20 h-full w-full px-[6%] py-[4%] flex flex-col items-center text-center"
-      style={{ color: "hsl(345 55% 28%)" /* deep maroon ink like the reference */ }}
+    {/* ── CONTENT ── */}
+    <div
+      className="relative z-20 h-full flex flex-col items-center text-center px-[9%] py-[2%]"
+      style={{ color: "hsl(345 60% 26%)" }}
     >
-      {/* Top blessings row */}
-      <div className="flex w-full justify-around max-w-[78%] mt-1">
+      {/* Blessings */}
+      <div className="flex w-full justify-around max-w-[95%] md:max-w-[80%]">
         {INVITE.blessings.map((b) => (
-          <span key={b} className="font-serif-soft italic text-[clamp(9px,1.05vw,13px)] tracking-wide">
+          <span
+            key={b}
+            className="font-serif-soft italic text-[clamp(8px,1.5vw,28px)] tracking-wide opacity-80"
+          >
             {b}
           </span>
         ))}
       </div>
 
-      {/* Ganesha icon */}
-      <img
-        src={ganeshaIcon}
-        alt="Ganesha"
-        className="mt-2 h-[10%] object-contain"
-        style={{ filter: "sepia(1) hue-rotate(-25deg) saturate(2)" }}
-      />
+      {/* ── Ganesha icon — no colour filter, just a soft shadow ── */}
+      <div className="mt-[1%] h-[8%] flex items-center justify-center">
+        <img
+          src={ganeshaIcon}
+          alt="Ganesha"
+          className="h-full w-auto object-contain"
+          style={{ filter: "drop-shadow(0 2px 8px rgba(100,50,10,0.35))" }}
+        />
+      </div>
 
       {/* Heading */}
-      <h3 className="mt-1 font-display italic text-[clamp(20px,2.6vw,30px)] leading-none">
+      <h3
+        className="mt-[1%] font-display italic leading-none"
+        style={{ fontSize: "clamp(14px,3.2vw,56px)" }}
+      >
         {INVITE.heading}
       </h3>
 
-      {/* Intro */}
-      <p className="mt-2 font-serif-soft italic text-[clamp(10px,1.15vw,14px)] leading-tight">
+      {/* Gold divider */}
+      <div className="gold-divider w-[55%] my-[1%] opacity-50" />
+
+      {/* Intro lines */}
+      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5vw,30px)" }}>
         {INVITE.intro}
       </p>
-      <p className="font-serif-soft italic text-[clamp(10px,1.15vw,14px)] leading-tight">
+      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5vw,30px)" }}>
         {INVITE.intro2}
       </p>
-      <p className="font-serif-soft italic text-[clamp(10px,1.15vw,14px)] leading-tight">
+      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5vw,30px)" }}>
         {INVITE.intro3}
       </p>
 
-      {/* Names */}
-      <p className="mt-2 font-display text-[clamp(15px,2vw,22px)] leading-tight">
-        <span className="text-[0.75em] mr-1">{INVITE.groomPrefix}</span>
-        <span className="italic font-semibold">{INVITE.groom}</span>
-      </p>
-      <p className="font-serif-soft italic text-[clamp(10px,1.1vw,13px)] my-0.5 opacity-80">
-        {INVITE.with}
-      </p>
-      <p className="font-display text-[clamp(15px,2vw,22px)] leading-tight">
-        <span className="text-[0.7em] mr-1">{INVITE.bridePrefix}</span>
+      {/* Groom name */}
+      <p className="mt-[1.5%] font-display leading-tight" style={{ fontSize: "clamp(14px,2.5vw,44px)" }}>
+        <span style={{ fontSize: "0.72em" }} className="mr-1">{INVITE.bridePrefix}</span>
         <span className="italic font-semibold">{INVITE.bride}</span>
       </p>
-      <p className="font-serif-soft text-[clamp(8px,0.95vw,11px)] opacity-75 leading-snug max-w-[88%] mt-1">
+
+      <p className="font-serif-soft italic opacity-70 my-[0.5%]" style={{ fontSize: "clamp(8px,1.3vw,24px)" }}>
+        {INVITE.with}
+      </p>
+
+      {/* Bride name */}
+      <p className="font-display leading-tight" style={{ fontSize: "clamp(14px,2.5vw,44px)" }}>
+        <span style={{ fontSize: "0.68em" }} className="mr-1">{INVITE.groomPrefix}</span>
+        <span className="italic font-semibold">{INVITE.groom}</span>
+      </p>
+
+      <p
+        className="font-serif-soft opacity-65 leading-snug max-w-[90%] mt-[1%]"
+        style={{ fontSize: "clamp(7px,1.1vw,20px)" }}
+      >
         {INVITE.brideParents}
       </p>
 
-      {/* Sumuhurtham */}
-      <p className="mt-2 font-display italic text-[clamp(13px,1.7vw,18px)]">
+      {/* Thin divider */}
+      <div className="gold-divider w-[45%] my-[1%] opacity-40" />
+
+      {/* Muhurtham */}
+      <p className="font-display italic" style={{ fontSize: "clamp(10px,1.9vw,32px)" }}>
         {INVITE.muhurthamLabel} :
       </p>
-      <p className="font-serif-soft italic text-[clamp(10px,1.2vw,14px)] leading-tight">
+      <p className="font-serif-soft italic leading-snug" style={{ fontSize: "clamp(8px,1.4vw,24px)" }}>
         {INVITE.date}
       </p>
-      <p className="font-serif-soft italic text-[clamp(10px,1.2vw,14px)] leading-tight">
-        {INVITE.time}
-      </p>
-
-      {/* Venue box */}
-      <div className="mt-2 px-4 py-1.5 border border-rose-900/40 max-w-[80%]">
-        <p className="font-display italic text-[clamp(12px,1.5vw,17px)] leading-tight">
-          {INVITE.venueLabel} :
+      
+      {/* Venue & Time */}
+      <div className="mt-[1%] flex flex-col items-center">
+        <p className="font-serif-soft text-[clamp(8px,1.4vw,24px)] mb-[0.5%]">
+          {INVITE.time}
         </p>
-        <p className="font-display italic font-semibold text-[clamp(13px,1.7vw,19px)] leading-tight">
+        <p
+          className="font-sans-clean tracking-widest uppercase text-gold-bright drop-shadow-sm font-semibold"
+          style={{ fontSize: "clamp(9px,1.7vw,32px)" }}
+        >
           {INVITE.venue}
         </p>
-        <p className="font-serif-soft italic text-[clamp(9px,1.05vw,12px)] leading-tight whitespace-pre-line opacity-85">
+        <p className="font-serif-soft opacity-80" style={{ fontSize: "clamp(7px,1.2vw,22px)" }}>
           {INVITE.venueAddress}
         </p>
       </div>
 
       {/* Invited by */}
-      <p className="mt-2 font-display italic text-[clamp(11px,1.35vw,15px)]">
+      <p className="mt-[1.5%] font-display italic" style={{ fontSize: "clamp(9px,1.6vw,28px)" }}>
         {INVITE.invitedBy} :
       </p>
       {INVITE.hosts.map((h) => (
-        <p key={h} className="font-display italic text-[clamp(11px,1.4vw,16px)] leading-tight">
+        <p
+          key={h}
+          className="font-display italic leading-tight"
+          style={{ fontSize: "clamp(8px,1.3vw,18px)" }}
+        >
           {h}
         </p>
       ))}
 
       {/* Closing */}
-      <p className="mt-auto mb-1 font-serif-soft italic text-[clamp(8px,0.95vw,11px)] opacity-70">
+      <p
+        className="mt-auto mb-0.5 font-serif-soft italic opacity-60"
+        style={{ fontSize: "clamp(7px,0.9vw,10px)" }}
+      >
         {INVITE.closing}
       </p>
     </div>
   </div>
 );
 
-const Sparkles = () => (
-  <div className="absolute inset-0 opacity-50 pointer-events-none">
-    {Array.from({ length: 40 }).map((_, i) => (
+/* ══════════════════════════════════════════════════════════════
+   BACKGROUND HELPERS
+══════════════════════════════════════════════════════════════ */
+
+/** 60 twinkling gold star-dust particles */
+const StarField = () => (
+  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    {Array.from({ length: 60 }).map((_, i) => (
       <span
         key={i}
-        className="absolute w-1 h-1 rounded-full bg-gold-bright"
+        className="absolute rounded-full"
         style={{
-          top: `${(i * 37) % 100}%`,
-          left: `${(i * 71) % 100}%`,
-          opacity: 0.2 + ((i * 13) % 70) / 100,
-          transform: `scale(${0.4 + ((i * 7) % 10) / 10})`,
+          top:    `${(i * 41)  % 100}%`,
+          left:   `${(i * 73)  % 100}%`,
+          width:  `${1 + (i % 3)}px`,
+          height: `${1 + (i % 3)}px`,
+          background: `hsl(${40 + (i % 6) * 3} ${60 + (i % 5) * 4}% ${58 + (i % 4) * 4}%)`,
+          animation: `sparkle-twinkle ${2.5 + (i % 5)}s ${(i * 0.25) % 4}s ease-in-out infinite`,
+          opacity: 0.15 + ((i * 11) % 55) / 100,
         }}
       />
+    ))}
+  </div>
+);
+
+/** Floating ✿ flower symbols drift upward */
+const FloatingSymbols = () => (
+  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    {Array.from({ length: 14 }).map((_, i) => (
+      <span
+        key={i}
+        className="absolute text-gold-bright animate-float-petal select-none"
+        style={{
+          bottom: `-${(i * 7) % 20}%`,
+          left:   `${(i * 19 + 4) % 95}%`,
+          fontSize: `${10 + (i % 5) * 5}px`,
+          opacity: 0,
+          "--duration": `${9 + (i % 6) * 2}s`,
+          "--delay":    `${(i * 0.9) % 6}s`,
+          "--drift-x":  `${(i % 2 === 0 ? 1 : -1) * (25 + (i * 11) % 45)}px`,
+          "--spin":     `${(i % 2 === 0 ? 1 : -1) * (100 + (i * 43) % 260)}deg`,
+        } as React.CSSProperties}
+      >
+        {["✿", "❀", "✾", "❁"][i % 4]}
+      </span>
     ))}
   </div>
 );

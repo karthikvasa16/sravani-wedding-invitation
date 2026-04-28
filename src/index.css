@@ -6,62 +6,50 @@
 
 @layer base {
   :root {
-    /* Wedding palette: Deep Royal Blue, Champagne Gold, Cream */
-    --background: 40 38% 95%;          /* cream */
-    --foreground: 224 64% 14%;         /* royal blue ink */
+    --background: 40 38% 95%;
+    --foreground: 224 64% 14%;
 
     --cream: 40 38% 95%;
     --cream-soft: 38 30% 92%;
     --cream-deep: 36 25% 88%;
 
-    --royal: 224 64% 18%;              /* deep royal blue */
+    --royal: 224 64% 18%;
     --royal-deep: 226 70% 11%;
     --royal-soft: 222 45% 28%;
 
-    --gold: 38 55% 58%;                /* champagne gold */
+    --gold: 38 55% 58%;
     --gold-bright: 42 70% 65%;
     --gold-deep: 34 50% 42%;
 
     --card: 40 38% 95%;
     --card-foreground: 224 64% 14%;
-
     --popover: 40 38% 95%;
     --popover-foreground: 224 64% 14%;
-
     --primary: 224 64% 18%;
     --primary-foreground: 40 38% 95%;
-
     --secondary: 38 55% 58%;
     --secondary-foreground: 224 64% 14%;
-
     --muted: 38 30% 92%;
     --muted-foreground: 224 30% 35%;
-
     --accent: 38 55% 58%;
     --accent-foreground: 224 64% 14%;
-
     --destructive: 0 70% 45%;
     --destructive-foreground: 40 38% 95%;
-
     --border: 38 35% 80%;
     --input: 38 35% 80%;
     --ring: 38 55% 58%;
-
     --radius: 0.25rem;
 
-    /* Gradients */
     --gradient-gold: linear-gradient(135deg, hsl(42 70% 65%) 0%, hsl(34 50% 42%) 100%);
     --gradient-royal: linear-gradient(180deg, hsl(224 64% 18%) 0%, hsl(226 70% 11%) 100%);
     --gradient-cream: linear-gradient(180deg, hsl(40 38% 95%) 0%, hsl(36 25% 88%) 100%);
     --gradient-overlay: linear-gradient(180deg, transparent 0%, hsl(226 70% 11% / 0.85) 100%);
 
-    /* Shadows */
     --shadow-elegant: 0 30px 80px -20px hsl(224 64% 14% / 0.35);
     --shadow-soft: 0 10px 40px -10px hsl(224 64% 14% / 0.18);
     --shadow-gold: 0 20px 50px -15px hsl(38 55% 58% / 0.5);
     --shadow-envelope: 0 40px 80px -20px hsl(226 70% 11% / 0.55), 0 0 0 1px hsl(38 55% 58% / 0.3);
 
-    /* Easing */
     --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
 
     --sidebar-background: 40 38% 95%;
@@ -76,9 +64,7 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
 
   html, body {
     @apply bg-background text-foreground;
@@ -88,8 +74,7 @@
   }
 
   body {
-    background:
-      radial-gradient(ellipse at top, hsl(38 30% 92%) 0%, hsl(40 38% 95%) 60%);
+    background: radial-gradient(ellipse at top, hsl(38 30% 92%) 0%, hsl(40 38% 95%) 60%);
   }
 
   h1, h2, h3, h4 {
@@ -98,7 +83,6 @@
     letter-spacing: -0.01em;
   }
 
-  /* Lenis */
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -131,14 +115,33 @@
   .preserve-3d { transform-style: preserve-3d; }
   .backface-hidden { backface-visibility: hidden; }
 
-  /* Decorative gold divider */
   .gold-divider {
     height: 1px;
     background: linear-gradient(90deg, transparent, hsl(var(--gold)), transparent);
   }
 
   .tracking-luxury { letter-spacing: 0.35em; }
+
+  /* 3D card tilt container */
+  .card-3d-scene {
+    perspective: 1800px;
+    perspective-origin: 50% 50%;
+  }
+  .card-3d-inner {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .card-depth-shadow {
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.08),
+      0 8px 16px rgba(0,0,0,0.12),
+      0 24px 40px rgba(0,0,0,0.18),
+      0 48px 80px rgba(0,0,0,0.25),
+      0 0 0 1px hsl(38 55% 58% / 0.25);
+  }
 }
+
+/* ===== KEYFRAMES ===== */
 
 @keyframes breathe {
   0%, 100% { transform: scale(1); opacity: 0.95; filter: drop-shadow(0 0 30px hsl(var(--gold) / 0.25)); }
@@ -157,4 +160,44 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shimmer 6s linear infinite;
+}
+
+@keyframes float-petal {
+  0%   { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-110vh) translateX(var(--drift-x, 40px)) rotate(var(--spin, 360deg)); opacity: 0; }
+}
+.animate-float-petal { animation: float-petal var(--duration, 8s) var(--delay, 0s) ease-in-out infinite; }
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.9); opacity: 0.6; }
+  50%  { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+.animate-pulse-ring { animation: pulse-ring 3s ease-in-out infinite; }
+
+@keyframes gold-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(38 55% 58% / 0.4), 0 0 40px hsl(38 55% 58% / 0.2); }
+  50%       { box-shadow: 0 0 35px hsl(42 70% 65% / 0.7), 0 0 70px hsl(42 70% 65% / 0.35); }
+}
+.animate-gold-glow { animation: gold-glow 3.5s ease-in-out infinite; }
+
+@keyframes wax-seal-appear {
+  0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+  60%  { transform: scale(1.08) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.animate-wax-seal { animation: wax-seal-appear 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+@keyframes mandala-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-mandala-slow  { animation: mandala-spin 40s linear infinite; }
+.animate-mandala-medium { animation: mandala-spin 25s linear infinite reverse; }
+
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.6); }
+  50%       { opacity: 1;   transform: scale(1.2); }
 }

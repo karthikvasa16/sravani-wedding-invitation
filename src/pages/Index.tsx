@@ -26,7 +26,7 @@ const Index = () => {
 
   return (
     <main className="relative bg-background text-foreground">
-      <h1 className="sr-only">Aarav & Ananya — Wedding Invitation</h1>
+      <h1 className="sr-only">Viha Sravani &amp; Pranay Chary — Wedding Invitation</h1>
 
       <SlideIntro />
 
@@ -34,9 +34,9 @@ const Index = () => {
         side="right"
         image={brideImg}
         title="The Bride"
-        name="Viha (Sravani)"
-        intro="Daughter of Mr. Ravuri Malleshwara Rao & Mrs. Ravuri Padhmavathi. A classical dancer and storyteller, who finds magic in the smallest moments of life."
-        meta="Palakollu · 1998"
+        name="Viha Sravani"
+        intro="Daughter of Mr. Ravuri Malleshwara Rao & Mrs. Padhmavathi. A classical dancer and storyteller, who finds magic in the smallest moments of life."
+        meta="Chinthaparru, Palakollu · 1998"
         bg="royal"
       />
 
@@ -45,8 +45,8 @@ const Index = () => {
         image={groomImg}
         title="The Groom"
         name="Pranay Chari"
-        intro="Son of Mr. Rajesh & Mrs. Priya Sharma. An architect by trade, a dreamer by heart — finding poetry in still mornings and quiet music."
-        meta="Hyderabad · 1998"
+        intro="Son of Mr. Kolloju Narsimha Charyi & Mrs. Uma Maheshwari. An architect by trade, a dreamer by heart — finding poetry in still mornings and quiet music."
+        meta="Chitkul, Hyderabad · 1998"
         bg="cream"
       />
 
