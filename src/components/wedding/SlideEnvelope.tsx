@@ -184,7 +184,7 @@ const GatePanel = ({
       style={{ filter: brightness, backfaceVisibility: "hidden" }}
       className="relative w-full h-full overflow-hidden"
     >
-      {/* Cream paper base */}
+      {/* Cream paper base — no damask on cover */}
       <div
         className="absolute inset-0"
         style={{
@@ -192,64 +192,55 @@ const GatePanel = ({
             "linear-gradient(135deg, hsl(40 38% 97%) 0%, hsl(38 28% 92%) 50%, hsl(36 22% 86%) 100%)",
         }}
       />
-      {/* damask floral pattern background */}
+
+      {/* Single damask block in the CENTER of the closed cover — split across gates */}
       <div
-        className="absolute inset-0 opacity-30 mix-blend-multiply"
-        style={{
-          backgroundImage: `url(${damaskBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: isLeft ? "left center" : "right center",
-        }}
-      />
+        className={`absolute top-1/2 ${isLeft ? "right-0" : "left-0"} -translate-y-1/2 h-[55%] aspect-square ${
+          isLeft ? "translate-x-1/2" : "-translate-x-1/2"
+        } pointer-events-none opacity-40 mix-blend-multiply z-[1]`}
+        style={{ clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)" }}
+      >
+        <img src={damaskBg} alt="" className="w-full h-full object-cover" />
+      </div>
 
       {/* double inner frame */}
-      <div className="absolute inset-[14px] border border-stone-300/70" />
-      <div className="absolute inset-[18px] border border-stone-200/50" />
+      <div className="absolute inset-[14px] border border-stone-300/70 z-[2]" />
+      <div className="absolute inset-[18px] border border-stone-200/50 z-[2]" />
 
-      {/* Floral corners — only on outer corners of each panel */}
-      {isLeft ? (
-        <img
-          src={floralTL}
-          alt=""
-          className="absolute top-0 left-0 w-[55%] pointer-events-none select-none"
-        />
-      ) : (
+      {/* Floral corner — only on the RIGHT panel, bottom-right outer corner.
+          (floral-br.png file actually contains a top-left bouquet, so we flip it.) */}
+      {!isLeft && (
         <img
           src={floralBR}
           alt=""
-          className="absolute bottom-0 right-0 w-[55%] pointer-events-none select-none"
+          className="absolute bottom-0 right-0 w-[45%] pointer-events-none select-none z-[3]"
+          style={{ transform: "scaleX(-1) scaleY(-1)" }}
         />
       )}
 
-      {/* CENTER MEDALLIONS — clipped to half so each panel shows its side */}
-      {/* Top: Ganesha medallion */}
+      {/* CENTER GANESHA — split across both gates so it sits perfectly centered when closed */}
       <div
-        className={`absolute top-[14%] ${isLeft ? "right-0" : "left-0"} h-[42%] aspect-square ${
+        className={`absolute top-1/2 ${isLeft ? "right-0" : "left-0"} -translate-y-1/2 h-[36%] aspect-square ${
           isLeft ? "translate-x-1/2" : "-translate-x-1/2"
-        } z-10 pointer-events-none`}
+        } z-[4] pointer-events-none`}
       >
         <div
           className="relative w-full h-full"
           style={{ clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)" }}
         >
           <img
-            src={medallionTop}
-            alt=""
-            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_4px_8px_rgba(80,60,30,0.25)]"
-          />
-          <img
             src={ganeshaIcon}
             alt=""
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[34%] h-[34%] object-contain"
+            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_4px_10px_rgba(80,60,30,0.35)]"
           />
         </div>
       </div>
 
-      {/* Bottom: Wedding Invitation banner */}
+      {/* Bottom: Wedding Invitation banner — split across both gates */}
       <div
-        className={`absolute bottom-[12%] ${isLeft ? "right-0" : "left-0"} h-[14%] w-[58%] ${
+        className={`absolute bottom-[10%] ${isLeft ? "right-0" : "left-0"} h-[12%] w-[55%] ${
           isLeft ? "translate-x-1/2" : "-translate-x-1/2"
-        } z-10 pointer-events-none`}
+        } z-[4] pointer-events-none`}
       >
         <div
           className="relative w-full h-full"
@@ -306,9 +297,9 @@ const InnerInvitation = () => (
     {/* Center crease line */}
     <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-stone-400/30 z-20 pointer-events-none" />
 
-    {/* Floral corners */}
-    <img src={floralTL} alt="" className="absolute top-0 left-0 w-[22%] pointer-events-none select-none z-10" />
-    <img src={floralBR} alt="" className="absolute bottom-0 right-0 w-[22%] pointer-events-none select-none z-10" />
+    {/* Floral corners — note: asset filenames are inverted, so floral-br has the TL bouquet and vice-versa */}
+    <img src={floralBR} alt="" className="absolute top-0 left-0 w-[24%] pointer-events-none select-none z-10" />
+    <img src={floralTL} alt="" className="absolute bottom-0 right-0 w-[24%] pointer-events-none select-none z-10" />
 
     {/* double frame */}
     <div className="absolute inset-[14px] border border-rose-900/30 z-10" />
