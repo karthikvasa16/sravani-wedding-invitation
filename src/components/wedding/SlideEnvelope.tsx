@@ -297,9 +297,9 @@ const InnerInvitation = () => (
     {/* Center crease line */}
     <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-stone-400/30 z-20 pointer-events-none" />
 
-    {/* Floral corners */}
-    <img src={floralTL} alt="" className="absolute top-0 left-0 w-[22%] pointer-events-none select-none z-10" />
-    <img src={floralBR} alt="" className="absolute bottom-0 right-0 w-[22%] pointer-events-none select-none z-10" />
+    {/* Floral corners — note: asset filenames are inverted, so floral-br has the TL bouquet and vice-versa */}
+    <img src={floralBR} alt="" className="absolute top-0 left-0 w-[24%] pointer-events-none select-none z-10" />
+    <img src={floralTL} alt="" className="absolute bottom-0 right-0 w-[24%] pointer-events-none select-none z-10" />
 
     {/* double frame */}
     <div className="absolute inset-[14px] border border-rose-900/30 z-10" />
