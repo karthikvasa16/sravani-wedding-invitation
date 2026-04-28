@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import couple from "@/assets/couple.jpg";
+import couple1 from "@/assets/couple1.jpg";
 import { Ornament } from "./Ornament";
 
 export const SlideCouple = () => {
@@ -31,14 +32,15 @@ export const SlideCouple = () => {
           style={{ scale: imgScale, x: imgX, y: imgY }}
           className="absolute inset-0 will-change-transform"
         >
-          <img
-            src={couple}
-            alt="The Couple"
-            width={1920}
-            height={1080}
-            loading="lazy"
-            className="w-full h-full object-cover"
-          />
+          <picture className="w-full h-full">
+            <source media="(min-width: 768px)" srcSet={couple} />
+            <img
+              src={couple1}
+              alt="The Couple"
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          </picture>
         </motion.div>
 
         {/* cinematic vignette */}
