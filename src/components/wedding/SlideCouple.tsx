@@ -53,7 +53,7 @@ export const SlideCouple = () => {
             Together, Forever
           </p>
           <h2 className="font-display text-6xl md:text-8xl leading-none">
-            Aarav <span className="italic gradient-gold-text">&</span> Ananya
+            Viha <span className="italic gradient-gold-text">&</span> Pranay
           </h2>
           <Ornament className="mt-8" />
           <p className="mt-6 font-serif-soft italic text-xl md:text-2xl text-cream/80 max-w-xl">
