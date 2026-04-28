@@ -50,40 +50,40 @@ export const SlideEnvelope = () => {
   const p = useSpring(scrollYProgress, { damping: 40, stiffness: 140, mass: 0.6 });
 
   /* Card enter */
-  const cardY       = useTransform(p, [0, 0.18], ["8%", "0%"]);
+  const cardY = useTransform(p, [0, 0.18], ["8%", "0%"]);
   const cardOpacity = useTransform(p, [0, 0.15], [0, 1]);
-  const cardScale   = useTransform(p, [0, 0.18], [0.92, 1]);
+  const cardScale = useTransform(p, [0, 0.18], [0.92, 1]);
 
   /* Gate fold 0.28 → 0.72 */
-  const leftRot  = useTransform(p, [0.28, 0.72], [0, -172]);
-  const rightRot = useTransform(p, [0.28, 0.72], [0,  172]);
+  const leftRot = useTransform(p, [0.28, 0.72], [0, -172]);
+  const rightRot = useTransform(p, [0.28, 0.72], [0, 172]);
 
   /* Gate face brightness while rotating */
-  const leftShade  = useTransform(p, [0.28, 0.5, 0.72], [1, 0.55, 0.7]);
+  const leftShade = useTransform(p, [0.28, 0.5, 0.72], [1, 0.55, 0.7]);
   const rightShade = useTransform(p, [0.28, 0.5, 0.72], [1, 0.55, 0.7]);
 
   /* Inner reveal */
   const innerOpacity = useTransform(p, [0.45, 0.72], [0, 1]);
-  const innerScale   = useTransform(p, [0.45, 0.88], [0.96, 1]);
+  const innerScale = useTransform(p, [0.45, 0.88], [0.96, 1]);
 
   /* Slide gates off-screen after they've opened */
-  const gatesX        = useTransform(p, [0.72, 0.95], [0, 90]);
-  const negGatesX     = useTransform(gatesX, (v) => -v); /* ← FIX: top-level hook */
-  const gatesOpacity  = useTransform(p, [0.85, 0.98], [1, 0]);
+  const gatesX = useTransform(p, [0.72, 0.95], [0, 90]);
+  const negGatesX = useTransform(gatesX, (v) => -v); /* ← FIX: top-level hook */
+  const gatesOpacity = useTransform(p, [0.85, 0.98], [1, 0]);
 
   /* Crease shadow fades as gates open */
   const creaseOpacity = useTransform(p, [0.15, 0.38], [0.6, 0]);
 
   /* Prompts */
   const captionOpacity = useTransform(p, [0.9, 1], [0, 1]);
-  const promptOpacity  = useTransform(p, [0, 0.08], [0.9, 0]);
+  const promptOpacity = useTransform(p, [0, 0.08], [0.9, 0]);
 
   /* 3-D hover tilt on the whole card */
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const r  = e.currentTarget.getBoundingClientRect();
-    const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-    const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+    const r = e.currentTarget.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width / 2) / (r.width / 2);
+    const dy = (e.clientY - r.top - r.height / 2) / (r.height / 2);
     setTilt({ rx: dy * -5, ry: dx * 6 });
   };
   const onLeave = () => setTilt({ rx: 0, ry: 0 });
@@ -113,7 +113,7 @@ export const SlideEnvelope = () => {
 
         {/* ── CARD STAGE ─────────────────────────────── */}
         <motion.div
-          className="relative w-[95vw] sm:w-[90vw] md:w-[85vw] max-w-[1800px] max-h-[80vh] aspect-[0.75/1] sm:aspect-[1.1/1] md:aspect-[1.4/1] lg:aspect-[1.6/1] 2xl:aspect-[1.8/1]"
+          className="relative w-[95vw] sm:w-[90vw] md:w-[85vw] max-w-[900px] max-h-[80vh] aspect-[0.75/1] sm:aspect-[1.1/1] md:aspect-[1.4/1]"
           style={{
             y: cardY, opacity: cardOpacity, scale: cardScale,
             filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.12)) drop-shadow(0 24px 48px rgba(0,0,0,0.38))",
@@ -242,9 +242,8 @@ const GatePanel = ({
 
       {/* ── CENTER VINAYAKA / GANESHA — split across both gates ── */}
       <div
-        className={`absolute top-1/2 -translate-y-1/2 h-[44%] aspect-square pointer-events-none z-10 ${
-          isLeft ? "right-0 translate-x-1/2" : "left-0 -translate-x-1/2"
-        }`}
+        className={`absolute top-1/2 -translate-y-1/2 h-[44%] aspect-square pointer-events-none z-10 ${isLeft ? "right-0 translate-x-1/2" : "left-0 -translate-x-1/2"
+          }`}
         style={{
           clipPath: isLeft ? "inset(0 50% 0 0)" : "inset(0 0 0 50%)",
         }}
@@ -260,7 +259,7 @@ const GatePanel = ({
             WebkitMaskImage: "radial-gradient(circle, black 25%, transparent 68%)",
           }}
         />
-        
+
         {/* Plain Vinayaka image */}
         <img
           src={vinayaka}
@@ -291,6 +290,7 @@ const InnerInvitation = () => (
     style={{
       background:
         "linear-gradient(170deg, hsl(40 38% 97%) 0%, hsl(38 30% 94%) 45%, hsl(36 24% 89%) 100%)",
+      containerType: "inline-size",
     }}
   >
     {/* Damask watermark — very subtle */}
@@ -363,7 +363,7 @@ const InnerInvitation = () => (
         {INVITE.blessings.map((b) => (
           <span
             key={b}
-            className="font-serif-soft italic text-[clamp(8px,1.5vw,28px)] tracking-wide opacity-80"
+            className="font-serif-soft italic text-[clamp(8px,1.5cqw,28px)] tracking-wide opacity-80"
           >
             {b}
           </span>
@@ -383,7 +383,7 @@ const InnerInvitation = () => (
       {/* Heading */}
       <h3
         className="mt-[1%] font-display italic leading-none"
-        style={{ fontSize: "clamp(14px,3.2vw,56px)" }}
+        style={{ fontSize: "clamp(14px,3.2cqw,56px)" }}
       >
         {INVITE.heading}
       </h3>
@@ -392,35 +392,35 @@ const InnerInvitation = () => (
       <div className="gold-divider w-[55%] my-[1%] opacity-50" />
 
       {/* Intro lines */}
-      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5vw,30px)" }}>
+      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5cqw,30px)" }}>
         {INVITE.intro}
       </p>
-      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5vw,30px)" }}>
+      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5cqw,30px)" }}>
         {INVITE.intro2}
       </p>
-      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5vw,30px)" }}>
+      <p className="font-serif-soft italic leading-tight" style={{ fontSize: "clamp(8px,1.5cqw,30px)" }}>
         {INVITE.intro3}
       </p>
 
       {/* Groom name */}
-      <p className="mt-[1.5%] font-display leading-tight" style={{ fontSize: "clamp(14px,2.5vw,44px)" }}>
+      <p className="mt-[1.5%] font-display leading-tight" style={{ fontSize: "clamp(14px,2.5cqw,44px)" }}>
         <span style={{ fontSize: "0.72em" }} className="mr-1">{INVITE.bridePrefix}</span>
         <span className="italic font-semibold">{INVITE.bride}</span>
       </p>
 
-      <p className="font-serif-soft italic opacity-70 my-[0.5%]" style={{ fontSize: "clamp(8px,1.3vw,24px)" }}>
+      <p className="font-serif-soft italic opacity-70 my-[0.5%]" style={{ fontSize: "clamp(8px,1.3cqw,24px)" }}>
         {INVITE.with}
       </p>
 
       {/* Bride name */}
-      <p className="font-display leading-tight" style={{ fontSize: "clamp(14px,2.5vw,44px)" }}>
+      <p className="font-display leading-tight" style={{ fontSize: "clamp(14px,2.5cqw,44px)" }}>
         <span style={{ fontSize: "0.68em" }} className="mr-1">{INVITE.groomPrefix}</span>
         <span className="italic font-semibold">{INVITE.groom}</span>
       </p>
 
       <p
         className="font-serif-soft opacity-65 leading-snug max-w-[90%] mt-[1%]"
-        style={{ fontSize: "clamp(7px,1.1vw,20px)" }}
+        style={{ fontSize: "clamp(7px,1.1cqw,20px)" }}
       >
         {INVITE.brideParents}
       </p>
@@ -429,38 +429,38 @@ const InnerInvitation = () => (
       <div className="gold-divider w-[45%] my-[1%] opacity-40" />
 
       {/* Muhurtham */}
-      <p className="font-display italic" style={{ fontSize: "clamp(10px,1.9vw,32px)" }}>
+      <p className="font-display italic" style={{ fontSize: "clamp(10px,1.9cqw,32px)" }}>
         {INVITE.muhurthamLabel} :
       </p>
-      <p className="font-serif-soft italic leading-snug" style={{ fontSize: "clamp(8px,1.4vw,24px)" }}>
+      <p className="font-serif-soft italic leading-snug" style={{ fontSize: "clamp(8px,1.4cqw,24px)" }}>
         {INVITE.date}
       </p>
-      
+
       {/* Venue & Time */}
       <div className="mt-[1%] flex flex-col items-center">
-        <p className="font-serif-soft text-[clamp(8px,1.4vw,24px)] mb-[0.5%]">
+        <p className="font-serif-soft text-[clamp(8px,1.4cqw,24px)] mb-[0.5%]">
           {INVITE.time}
         </p>
         <p
           className="font-sans-clean tracking-widest uppercase text-gold-bright drop-shadow-sm font-semibold"
-          style={{ fontSize: "clamp(9px,1.7vw,32px)" }}
+          style={{ fontSize: "clamp(9px,1.7cqw,32px)" }}
         >
           {INVITE.venue}
         </p>
-        <p className="font-serif-soft opacity-80" style={{ fontSize: "clamp(7px,1.2vw,22px)" }}>
+        <p className="font-serif-soft opacity-80" style={{ fontSize: "clamp(7px,1.2cqw,22px)" }}>
           {INVITE.venueAddress}
         </p>
       </div>
 
       {/* Invited by */}
-      <p className="mt-[1.5%] font-display italic" style={{ fontSize: "clamp(9px,1.6vw,28px)" }}>
+      <p className="mt-[1.5%] font-display italic" style={{ fontSize: "clamp(9px,1.6cqw,28px)" }}>
         {INVITE.invitedBy} :
       </p>
       {INVITE.hosts.map((h) => (
         <p
           key={h}
           className="font-display italic leading-tight"
-          style={{ fontSize: "clamp(8px,1.3vw,18px)" }}
+          style={{ fontSize: "clamp(8px,1.3cqw,18px)" }}
         >
           {h}
         </p>
@@ -469,7 +469,7 @@ const InnerInvitation = () => (
       {/* Closing */}
       <p
         className="mt-auto mb-0.5 font-serif-soft italic opacity-60"
-        style={{ fontSize: "clamp(7px,0.9vw,10px)" }}
+        style={{ fontSize: "clamp(7px,0.9cqw,10px)" }}
       >
         {INVITE.closing}
       </p>
@@ -489,9 +489,9 @@ const StarField = () => (
         key={i}
         className="absolute rounded-full"
         style={{
-          top:    `${(i * 41)  % 100}%`,
-          left:   `${(i * 73)  % 100}%`,
-          width:  `${1 + (i % 3)}px`,
+          top: `${(i * 41) % 100}%`,
+          left: `${(i * 73) % 100}%`,
+          width: `${1 + (i % 3)}px`,
           height: `${1 + (i % 3)}px`,
           background: `hsl(${40 + (i % 6) * 3} ${60 + (i % 5) * 4}% ${58 + (i % 4) * 4}%)`,
           animation: `sparkle-twinkle ${2.5 + (i % 5)}s ${(i * 0.25) % 4}s ease-in-out infinite`,
@@ -511,13 +511,13 @@ const FloatingSymbols = () => (
         className="absolute text-gold-bright animate-float-petal select-none"
         style={{
           bottom: `-${(i * 7) % 20}%`,
-          left:   `${(i * 19 + 4) % 95}%`,
+          left: `${(i * 19 + 4) % 95}%`,
           fontSize: `${10 + (i % 5) * 5}px`,
           opacity: 0,
           "--duration": `${9 + (i % 6) * 2}s`,
-          "--delay":    `${(i * 0.9) % 6}s`,
-          "--drift-x":  `${(i % 2 === 0 ? 1 : -1) * (25 + (i * 11) % 45)}px`,
-          "--spin":     `${(i % 2 === 0 ? 1 : -1) * (100 + (i * 43) % 260)}deg`,
+          "--delay": `${(i * 0.9) % 6}s`,
+          "--drift-x": `${(i % 2 === 0 ? 1 : -1) * (25 + (i * 11) % 45)}px`,
+          "--spin": `${(i % 2 === 0 ? 1 : -1) * (100 + (i * 43) % 260)}deg`,
         } as React.CSSProperties}
       >
         {["✿", "❀", "✾", "❁"][i % 4]}

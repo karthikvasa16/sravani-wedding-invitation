@@ -30,12 +30,12 @@ const Index = () => {
 
       <SlideIntro />
 
-    <PersonSlide
+      <PersonSlide
         side="right"
         image={brideImg}
         title="The Bride"
         name="Viha Sravani"
-        intro="Daughter of Mr. Ravuri Malleshwara Rao & Mrs. Padhmavathi. A classical dancer and storyteller, who finds magic in the smallest moments of life."
+        intro="Daughter of Mr. Ravuri Malleshwara Rao & Mrs. Padhmavathi."
         meta="Chinthaparru, Palakollu · 1998"
         bg="royal"
       />
@@ -45,7 +45,7 @@ const Index = () => {
         image={groomImg}
         title="The Groom"
         name="Pranay Chari"
-        intro="Son of Mr. Kolloju Narsimha Charyi & Mrs. Uma Maheshwari. An architect by trade, a dreamer by heart — finding poetry in still mornings and quiet music."
+        intro="Son of Mr. Kolloju Narsimha Charyi & Mrs. Uma Maheshwari."
         meta="Chitkul, Hyderabad · 1998"
         bg="cream"
       />
