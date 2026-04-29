@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import { Ornament } from "./Ornament";
 import vinayaka from "@/assets/vinayaka.png";
+import coupleLogo from "@/assets/couple1.jpg";
 
 export const SlideIntro = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -53,6 +54,22 @@ export const SlideIntro = () => {
 
         {/* Corner ornaments */}
         <CornerOrnaments />
+
+        {/* Website Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, delay: 0.1 }}
+          className="mb-4 relative z-10"
+        >
+          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-gold/40 p-1 bg-white/10 backdrop-blur-sm overflow-hidden shadow-gold">
+            <img 
+              src={coupleLogo} 
+              alt="Couple Logo" 
+              className="w-full h-full object-cover rounded-full"
+            />
+          </div>
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
