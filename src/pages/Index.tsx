@@ -44,8 +44,8 @@ const Index = () => {
         side="left"
         image={groomImg}
         title="The Groom"
-        name="Pranay Chari"
-        intro="Son of Mr. Kolloju Narsimha Charyi & Mrs. Uma Maheshwari."
+        name="Pranay Chary"
+        intro="Son of Mr. Kolloju Narsimha Chary & Mrs. Uma Maheshwari."
         meta="Chitkul, Hyderabad · 1998"
         bg="cream"
       />

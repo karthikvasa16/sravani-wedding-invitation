@@ -26,7 +26,7 @@ const INVITE = {
   bridePrefix: "Chi.La.Sow.",
   bride: "Viha Sravani",
   brideParents:
-    "Elder S/o. Smt. & Sri Uma Maheshwari – Kolloju Narsimha Charyi, R/o. Chitkul",
+    "Elder S/o. Smt. & Sri Uma Maheshwari – Kolloju Narsimha Chary, R/o. Chitkul",
   muhurthamLabel: "Sumuhurtham",
   date: "Wednesday, 06th May 2026",
   time: 'at 10:49 a.m. \u201CKarkataka Lagnam\u201D',
